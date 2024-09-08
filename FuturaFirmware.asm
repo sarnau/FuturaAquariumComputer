@@ -315,7 +315,7 @@ DoIRQ:          LD      A,0
 				LD      (6000h),A               ;Port auslesen
 DoIRQ1:         IN      A,(00h)                 ;Keyboard-Spalte auslesen
 				LD      (DE),A                  ;und merken
-				LD      (HL),A                  qqww;Port-Adresse hochzählen
+				LD      (HL),A                  ;Port-Adresse hochzählen
 				DEC     DE                      ;eine Spalte nach vorne
 				DJNZ    DoIRQ1                  ;alle Spalten durch? Nein =>
 
