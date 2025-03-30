@@ -1,0 +1,81 @@
+Hex     Internal   Data Input/   Count         Remarks
+Code    Counter    Output        Value
+                   D0 D1 D2 D3
+
+0        S 1        *  *  *  *    0 ~ 9
+1        S 10       *  *  *       0 ~ 5
+2        MI 1       *  *  *  *    0 ~ 9
+3        MI 10      *  *  *       0 ~ 5
+4        H 1        *  *  *  *    0 ~ 9
+5        H 10       *  *  * (*)   0 ~ 1    D2 = H specifies PM, D2 = L
+                                           specifies AM, D3 = H specifies
+                                           24-hour timer, and D3 = L
+                                           specifies 12 hour timer.
+                                           When D3 = H is written, the D2
+                                           bit is reset internally.
+6        W          *  *  *       0 ~ 6
+7        D 1        *  *  *  *    0 ~ 9
+8        D 10       *  * (+)(+)   0 ~ 3    The D2 and D3 bits of D10 are
+9        MO 1       *  *  *  *    0 ~ 9    used to select a leap year.
+A        MO 10      *             0 ~ 1
+B        Y 1        *  *  *  *    0 ~ 9
+C        Y 10       *  *  *  *    0 ~ 9
+D                                          A selector to reset 5
+                                           poststages in the (0.5)^12
+                                           frequency divider and the /BUSY
+                                           circuit. The are reset when
+                                           this code is latched with
+                                           ADDRESS LATCH and the WRITE
+                                           input goes to the H level.
+E-F                                        A selector to access the
+                                           reference signal outputs.
+                                           Reference signals are output to
+                                           D0~D3 when this code is latched
+                                           with ADDRESS LATCH and READ
+                                           input goes to H.
+
+NOTES:
+1.   * Data valid as "0" or "1"
+     Data does not exist in blank fields (unrecognized during a write and
+     held at "0" during a read).
+2.   The bit marked (*) is used to select the 12/24-hour timer and the
+     bits marked (+) are used to select a leap year. These 3 bits can be
+     read or written.
+3.   When signals are input on bus lines D0~D3 and ADDRESS WRITE goes to
+     the H level for address input, ADDRESS information is latched to an
+internal
+     address decoder.
+
+
+LEAP YEARS:
+Calendar         D2   D3       *
+-----------------------------------
+Gregorian         L    L       0
+Showa             H    L       3
+                  L    H       2
+                  H    H            [<- AdS: Hier steht nix, soll wohl 1
+                                     heißen...]
+* Remainder obtained by dividing the year number by 4.
+
+
+MF>Register 0,1 : Sekunden
+MF>Register 2,3 : Minuten
+MF>Register 4,5 : Stunden
+              5 : bit 3 gesetzt: 24 Stunden Format
+              5 : bit 2: 0=am, 1=pm
+            6   : Wochentag
+            7,8 : Tag (0-31)
+              8 : bit 3 gesetzt: Schaltjahr (Februar 29 Tage)
+            9,a : Monat
+            b,c : Jahr (0-99)
+Bis hier für den MSM 5832 RS.
+
+MSM 58321 RS:
+              8 : bit 3 und 2 beide 0: Durch 4 teilbare Jahre sind Schalt-
+                                       jahre
+          d,e,f : Sonderfunktionen
+
+RTC 58321 := MSM 58321 RS mit integriertem Quarzoszillator
+
+Sehr empfehlenswert:
+Mikroprozessor Datenbuch Band 2 und 3, Elektor Verlag

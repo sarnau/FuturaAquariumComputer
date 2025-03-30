@@ -1,0 +1,1 @@
+#pragma precompile_target "Z80_DebugHeadersPPC"#pragma once on#define SystemSevenFiveOrLater	1#include <MacHeaders.c>#define DEBUG				1
